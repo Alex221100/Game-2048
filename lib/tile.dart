@@ -8,7 +8,7 @@ class StatefulColorfulTile extends StatefulWidget {
 }
 
 class ColorfulTileState extends State<StatefulColorfulTile> {
-  ColorfulTileState({int? value}) : this.value = value ?? 2;
+  ColorfulTileState({int? value}) : this.value = value ?? 0;
 
   Color? color;
   int value;
@@ -16,7 +16,9 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
   @override
   void initState() {
     super.initState();
-    color = Colors.lightBlue[2048 - value];
+    color = value > 0
+        ? Colors.lightBlue[2048 - value]
+        : Color.fromRGBO(204, 192, 179, 1);
   }
 
   @override
@@ -26,7 +28,7 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
         height: 100,
         width: 100,
         child: Center(
-            child: Text(value.toString(),
+            child: Text(value > 0 ? value.toString() : "",
                 style: TextStyle(
                   fontSize: 40,
                   foreground: Paint()

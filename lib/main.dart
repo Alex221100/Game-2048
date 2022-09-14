@@ -18,10 +18,11 @@ class PositionedTilesState extends State<PositionedTiles> {
   @override
   void initState() {
     super.initState();
-    tiles = [
-      StatefulColorfulTile(key: UniqueKey()),
-      StatefulColorfulTile(key: UniqueKey())
-    ];
+    tiles = List.generate(16, (index) {
+      return Center(
+        child: StatefulColorfulTile(key: UniqueKey()),
+      );
+    });
   }
 
   @override
@@ -29,7 +30,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     return Scaffold(
         body: Center(
             child: Container(
-                color: const Color.fromRGBO(205, 193, 180, 1),
+                color: const Color.fromRGBO(187, 173, 160, 1),
                 height: 450,
                 width: 450,
                 child: GestureDetector(
@@ -55,9 +56,16 @@ class PositionedTilesState extends State<PositionedTiles> {
                         //_goBack();
                       }
                     },
-                    child: Table(
+                    child: GridView.count(
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this produces 2 rows.
+                        crossAxisCount: 4,
+                        // Generate 100 widgets that display their index in the List.
+                        children: tiles)))));
+    /*child: Table(
                       border: TableBorder.all(
-                          color: Color.fromRGBO(187, 173, 160, 1), width: 10),
+                          color: const Color.fromRGBO(187, 173, 160, 1),
+                          width: 10),
                       defaultColumnWidth: const FixedColumnWidth(120.0),
                       defaultVerticalAlignment:
                           TableCellVerticalAlignment.middle,
@@ -66,7 +74,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                           children: tiles,
                         ),
                       ],
-                    )))));
+                    )))));*/
   }
 
   swapTiles() {
