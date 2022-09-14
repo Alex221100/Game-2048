@@ -13,16 +13,17 @@ class PositionedTiles extends StatefulWidget {
 }
 
 class PositionedTilesState extends State<PositionedTiles> {
-  late List<Widget> tiles;
+  late List<List<StatefulColorfulTile>> tiles;
 
   @override
   void initState() {
     super.initState();
-    tiles = List.generate(16, (index) {
-      return Center(
-        child: StatefulColorfulTile(key: UniqueKey()),
-      );
-    });
+    tiles = List.generate(
+        4,
+        (index) => List.generate(4, (index2) {
+              return StatefulColorfulTile(value: 1, key: UniqueKey());
+            }),
+        growable: false);
   }
 
   @override
@@ -37,12 +38,15 @@ class PositionedTilesState extends State<PositionedTiles> {
                     onHorizontalDragEnd: (dragEndDetails) {
                       if (dragEndDetails.primaryVelocity! < 0) {
                         // Page forwards
-                        print('Move right');
+                        print('Move left');
                         //_goForward();
                       } else if (dragEndDetails.primaryVelocity! > 0) {
                         // Page backwards
-                        print('Move left');
-                        //_goBack();
+                        print('Move right');
+                        setState(() {
+                          tiles[0][0].value = tiles[0][0].value! + 1;
+                        });
+                        print(tiles[0][0].value);
                       }
                     },
                     onVerticalDragEnd: (dragEndDetails) {
@@ -57,24 +61,9 @@ class PositionedTilesState extends State<PositionedTiles> {
                       }
                     },
                     child: GridView.count(
-                        // Create a grid with 2 columns. If you change the scrollDirection to
-                        // horizontal, this produces 2 rows.
                         crossAxisCount: 4,
-                        // Generate 100 widgets that display their index in the List.
-                        children: tiles)))));
-    /*child: Table(
-                      border: TableBorder.all(
-                          color: const Color.fromRGBO(187, 173, 160, 1),
-                          width: 10),
-                      defaultColumnWidth: const FixedColumnWidth(120.0),
-                      defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                      children: <TableRow>[
-                        TableRow(
-                          children: tiles,
-                        ),
-                      ],
-                    )))));*/
+                        children:
+                            tiles.expand((element) => element).toList())))));
   }
 
   swapTiles() {

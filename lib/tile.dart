@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class StatefulColorfulTile extends StatefulWidget {
-  const StatefulColorfulTile({Key? key}) : super(key: key);
+  StatefulColorfulTile({this.value, Key? key}) : super(key: key);
+
+  int? value;
 
   @override
-  ColorfulTileState createState() => ColorfulTileState();
+  ColorfulTileState createState() => ColorfulTileState(value: this.value);
 }
 
 class ColorfulTileState extends State<StatefulColorfulTile> {
@@ -18,7 +20,7 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
     super.initState();
     color = value > 0
         ? Colors.lightBlue[2048 - value]
-        : Color.fromRGBO(204, 192, 179, 1);
+        : const Color.fromRGBO(204, 192, 179, 1);
   }
 
   @override
@@ -28,13 +30,13 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
         height: 100,
         width: 100,
         child: Center(
-            child: Text(value > 0 ? value.toString() : "",
+            child: Text(value.toString(),
                 style: TextStyle(
                   fontSize: 40,
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
                     ..strokeWidth = 6
-                    ..color = Color.fromRGBO(119, 110, 101, 47),
+                    ..color = const Color.fromRGBO(119, 110, 101, 47),
                 ))));
     /*child: Padding(
           padding: EdgeInsets.all(70.0),
