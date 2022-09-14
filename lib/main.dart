@@ -29,7 +29,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     return Scaffold(
         body: Center(
             child: Container(
-                color: Colors.red,
+                color: const Color.fromRGBO(205, 193, 180, 1),
                 height: 450,
                 width: 450,
                 child: GestureDetector(
@@ -56,12 +56,9 @@ class PositionedTilesState extends State<PositionedTiles> {
                       }
                     },
                     child: Table(
-                      border: TableBorder.all(),
-                      columnWidths: const <int, TableColumnWidth>{
-                        0: IntrinsicColumnWidth(),
-                        1: FlexColumnWidth(),
-                        2: FixedColumnWidth(64),
-                      },
+                      border: TableBorder.all(
+                          color: Color.fromRGBO(187, 173, 160, 1), width: 10),
+                      defaultColumnWidth: const FixedColumnWidth(120.0),
                       defaultVerticalAlignment:
                           TableCellVerticalAlignment.middle,
                       children: <TableRow>[
