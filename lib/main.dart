@@ -4,16 +4,18 @@ import 'dart:math';
 import 'tile.dart';
 
 void main() {
-  runApp(MaterialApp(home: PositionedTiles()));
+  runApp(MaterialApp(home: PositionedTiles(key: UniqueKey())));
 }
 
 class PositionedTiles extends StatefulWidget {
+  const PositionedTiles({super.key});
+
   @override
   State<StatefulWidget> createState() => PositionedTilesState();
 }
 
 class PositionedTilesState extends State<PositionedTiles> {
-  late List<List<StatefulColorfulTile>> tiles;
+  late List<List<int>> tiles;
 
   @override
   void initState() {
@@ -21,7 +23,8 @@ class PositionedTilesState extends State<PositionedTiles> {
     tiles = List.generate(
         4,
         (index) => List.generate(4, (index2) {
-              return StatefulColorfulTile(value: 1, key: UniqueKey());
+              return 2;
+              //return StatefulColorfulTile(key: UniqueKey());
             }),
         growable: false);
   }
@@ -44,9 +47,9 @@ class PositionedTilesState extends State<PositionedTiles> {
                         // Page backwards
                         print('Move right');
                         setState(() {
-                          tiles[0][0].value = tiles[0][0].value! + 1;
+                          tiles[0][0] = tiles[0][0] + 1;
                         });
-                        print(tiles[0][0].value);
+                        print(tiles[0][0]);
                       }
                     },
                     onVerticalDragEnd: (dragEndDetails) {
@@ -62,8 +65,11 @@ class PositionedTilesState extends State<PositionedTiles> {
                     },
                     child: GridView.count(
                         crossAxisCount: 4,
-                        children:
-                            tiles.expand((element) => element).toList())))));
+                        children: tiles
+                            .expand((value) => value)
+                            .map<StatefulColorfulTile>((element) =>
+                                StatefulColorfulTile(element, key: UniqueKey()))
+                            .toList())))));
   }
 
   swapTiles() {

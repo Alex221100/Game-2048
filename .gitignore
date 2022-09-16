@@ -142,3 +142,37 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 windows/flutter/generated_plugin_registrant.cc
 windows/flutter/generated_plugin_registrant.h
 windows/flutter/generated_plugins.cmake
+.dart_tool/chrome-device/Default/AutofillStrikeDatabase/LOG.old
+.dart_tool/chrome-device/Default/BudgetDatabase/LOG.old
+.dart_tool/chrome-device/Default/coupon_db/LOG.old
+.dart_tool/chrome-device/Default/Download Service/EntryDB/LOG.old
+.dart_tool/chrome-device/Default/Extension State/LOG.old
+.dart_tool/chrome-device/Default/Feature Engagement Tracker/AvailabilityDB/LOG.old
+.dart_tool/chrome-device/Default/Feature Engagement Tracker/EventDB/LOG.old
+.dart_tool/chrome-device/Default/GCM Store/Encryption/LOG.old
+.dart_tool/chrome-device/Default/Local Storage/leveldb/LOG.old
+.dart_tool/chrome-device/Default/LOG.old
+.dart_tool/chrome-device/Default/optimization_guide_hint_cache_store/LOG.old
+.dart_tool/chrome-device/Default/optimization_guide_model_metadata_store/LOG.old
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/24bd3be1-e0d0-41ed-ae39-8b8cb5a5ce4d/model.tflite
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/d1624805-a297-4728-a702-79b6d483faf9/model.tflite
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/global-entities_metadata
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/global-entities_names
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/global-entities_names_filter
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/global-entities_prefixes_filter
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/model.tflite
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/model_metadata.pb
+.dart_tool/chrome-device/Default/optimization_guide_prediction_model_downloads/df4d2241-7290-4369-a981-f26ac9f6e11f/word_embeddings
+.dart_tool/chrome-device/Default/Segmentation Platform/SegmentInfoDB/LOG.old
+.dart_tool/chrome-device/Default/Segmentation Platform/SignalDB/LOG.old
+.dart_tool/chrome-device/Default/Segmentation Platform/SignalStorageConfigDB/LOG.old
+.dart_tool/chrome-device/Default/Service Worker/Database/LOG.old
+.dart_tool/chrome-device/Default/Service Worker/ScriptCache/4cb013792b196a35_0
+.dart_tool/chrome-device/Default/Service Worker/ScriptCache/f1cdccba37924bda_0
+.dart_tool/chrome-device/Default/Session Storage/LOG.old
+.dart_tool/chrome-device/Default/Sessions/Session_13307633995406157
+.dart_tool/chrome-device/Default/Sessions/Session_13307640580120153
+.dart_tool/chrome-device/Default/shared_proto_db/LOG.old
+.dart_tool/chrome-device/Default/shared_proto_db/metadata/LOG.old
+.dart_tool/chrome-device/Default/Site Characteristics Database/LOG.old
+.dart_tool/chrome-device/Default/Sync Data/LevelDB/LOG.old
