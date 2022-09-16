@@ -31,6 +31,8 @@ class PositionedTilesState extends State<PositionedTiles> {
 
   @override
   Widget build(BuildContext context) {
+    String? swipeDirection;
+
     return Scaffold(
         body: Center(
             child: Container(
@@ -38,26 +40,43 @@ class PositionedTilesState extends State<PositionedTiles> {
                 height: 450,
                 width: 450,
                 child: GestureDetector(
-                    onHorizontalDragEnd: (dragEndDetails) {
-                      if (dragEndDetails.primaryVelocity! < -100) {
-                        // Page forwards
-                        print('Move left');
-                        moveLeft();
-                        //_goForward();
-                      } else if (dragEndDetails.primaryVelocity! > 100) {
-                        // Page backwards
-                        print('Move right');
+                    onPanUpdate: (details) {
+                      if (details.delta.dx > 1) {
+                        swipeDirection = "right";
+                      } else {
+                        if (details.delta.dx < -1) {
+                          swipeDirection = "left";
+                        } else {
+                          if (details.delta.dy > 1) {
+                            swipeDirection = "down";
+                          } else {
+                            if (details.delta.dy < -1) {
+                              swipeDirection = "up";
+                            }
+                          }
+                        }
                       }
                     },
-                    onVerticalDragEnd: (dragEndDetails) {
-                      if (dragEndDetails.primaryVelocity! < 0) {
-                        // Page forwards
-                        print('Move bottom');
-                        //_goForward();
-                      } else if (dragEndDetails.primaryVelocity! > 0) {
-                        // Page backwards
-                        print('Move top');
-                        //_goBack();
+                    onPanEnd: (details) {
+                      if (swipeDirection != null) {
+                        if (swipeDirection == "right") {
+                          print("Action right");
+                        } else {
+                          if (swipeDirection == "left") {
+                            print("Action left");
+                            setState(() {
+                              moveLeft();
+                            });
+                          } else {
+                            if (swipeDirection == "down") {
+                              print("Action down");
+                            } else {
+                              if (swipeDirection == "up") {
+                                print("Action up");
+                              }
+                            }
+                          }
+                        }
                       }
                     },
                     child: GridView.count(
@@ -69,25 +88,19 @@ class PositionedTilesState extends State<PositionedTiles> {
                             .toList())))));
   }
 
-  swapTiles() {
-    setState(() {
-      tiles.insert(1, tiles.removeAt(0));
-    });
-  }
-
-  moveLeft(){
-    for (int i = 0; i < tiles.length; i++){
-      for (int j = tiles.length-1; j > 0; j--){
-        if (tiles[i][j] == tiles[i][j-1] ||  tiles[i][j-1] == 0){
+  moveLeft() {
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = tiles.length - 1; j > 0; j--) {
+        if (tiles[i][j] == tiles[i][j - 1] || tiles[i][j - 1] == 0) {
           //merge
-          merge(i, j-1, i, j);
+          merge(i, j - 1, i, j);
         }
       }
     }
   }
 
   //x1 est la case qui récupére la somme
-  merge(int x1, int y1, int x2, int y2 ){
+  merge(int x1, int y1, int x2, int y2) {
     tiles[x1][y1] = tiles[x1][y1] + tiles[x2][y2];
     tiles[x2][y2] = 0;
   }
