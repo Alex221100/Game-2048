@@ -61,15 +61,19 @@ class PositionedTilesState extends State<PositionedTiles> {
                       if (swipeDirection != null) {
                         if (swipeDirection == "right") {
                           print("Action right");
+                          setState(() {
+                            move(0,tiles.length-1, tiles.length, 0, 1,-1);
+                          });
                         } else {
                           if (swipeDirection == "left") {
                             print("Action left");
                             setState(() {
-                              moveLeft();
+                              move(0,0,tiles.length, tiles.length-1,1,1);
                             });
                           } else {
                             if (swipeDirection == "down") {
                               print("Action down");
+
                             } else {
                               if (swipeDirection == "up") {
                                 print("Action up");
@@ -88,20 +92,27 @@ class PositionedTilesState extends State<PositionedTiles> {
                             .toList())))));
   }
 
-  moveLeft() {
-    for (int i = 0; i < tiles.length; i++) {
-      for (int j = tiles.length - 1; j > 0; j--) {
-        if (tiles[i][j] == tiles[i][j - 1] || tiles[i][j - 1] == 0) {
+  move(int istart, int jstart, int iend, int jend, int ifactor, int jfactor) {
+    for (int i = istart; i < iend; i+=ifactor) {
+      for (int j = jstart ; jfactor * j < jend * jfactor; j+=jfactor) {
+        if (tiles[i][j] == tiles[i][j + 1 * jfactor] || tiles[i][j + 1*jfactor] == 0) {
           //merge
-          merge(i, j - 1, i, j);
+          if (j-1*jfactor > 0 && j-1*jfactor < tiles.length && tiles[i][j-1*jfactor] == 0){
+            merge(i, j , i, j+1*jfactor, i, j-1*jfactor);
+          }else{
+            merge(i, j , i, j+1*jfactor, i, j);
+          }
         }
       }
     }
   }
 
   //x1 est la case qui récupére la somme
-  merge(int x1, int y1, int x2, int y2) {
-    tiles[x1][y1] = tiles[x1][y1] + tiles[x2][y2];
+  merge(int x1, int y1, int x2, int y2, int mergex, int mergey) {
+    tiles[mergex][mergey] = tiles[x1][y1] + tiles[x2][y2];
     tiles[x2][y2] = 0;
+    if (mergey != y1){
+      tiles[x1][y1] = 0;
+    }
   }
 }
