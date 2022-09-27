@@ -33,6 +33,7 @@ class PositionedTilesState extends State<PositionedTiles> {
   @override
   Widget build(BuildContext context) {
     String? swipeDirection;
+    InheritedScore? inheritedScore = InheritedScore.of(context);
 
     return Scaffold(
         body: InheritedScore(
@@ -49,6 +50,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                     child: Container(
                         color: Colors.orangeAccent,
                         child: Center(child: Builder(builder: (context) {
+                          inheritedScore = InheritedScore.of(context);
                           return Text(
                               "Best Score : ${InheritedScore.of(context)?.scoreStructure.bestScore}",
                               style: const TextStyle(fontSize: 18.0));
@@ -91,24 +93,32 @@ class PositionedTilesState extends State<PositionedTiles> {
                       if (swipeDirection == "right") {
                         print("Action right");
                         setState(() {
-                          move(0, tiles.length - 1, tiles.length, 0, 1, -1);
+                          move("right");
                         });
                       } else {
                         if (swipeDirection == "left") {
                           print("Action left");
                           setState(() {
-                            move(0, 0, tiles.length, tiles.length - 1, 1, 1);
+                            move("left");
                           });
                         } else {
                           if (swipeDirection == "down") {
                             print("Action down");
+                            setState(() {
+                              move("down");
+                            });
                           } else {
                             if (swipeDirection == "up") {
                               print("Action up");
+                              setState(() {
+                                move("up");
+                              });
                             }
                           }
                         }
                       }
+
+                      spawnRandomTile();
                     }
                   },
                   child: GridView.count(
@@ -121,31 +131,103 @@ class PositionedTilesState extends State<PositionedTiles> {
         ])));
   }
 
-  move(int istart, int jstart, int iend, int jend, int ifactor, int jfactor) {
-    for (int i = istart; i < iend; i += ifactor) {
-      for (int j = jstart; jfactor * j < jend * jfactor; j += jfactor) {
-        if (tiles[i][j] == tiles[i][j + 1 * jfactor] ||
-            tiles[i][j + 1 * jfactor] == 0) {
-          //merge
-          if (j - 1 * jfactor > 0 &&
-              j - 1 * jfactor < tiles.length &&
-              tiles[i][j - 1 * jfactor] == 0) {
-            merge(i, j, i, j + 1 * jfactor, i, j - 1 * jfactor);
-          } else {
-            merge(i, j, i, j + 1 * jfactor, i, j);
+  move(String direction) {
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = 0; j < tiles.length; j++) {
+        int iOffset = 0;
+        int jOffset = 0;
+
+        switch (direction.toUpperCase()) {
+          case "UP":
+            iOffset = -1;
+            break;
+
+          case "DOWN":
+            iOffset = 1;
+            break;
+
+          case "LEFT":
+            jOffset = -1;
+            break;
+
+          case "RIGHT":
+            jOffset = 1;
+            break;
+        }
+
+        if (i + iOffset >= 0 &&
+            i + iOffset < tiles.length &&
+            j + jOffset >= 0 &&
+            j + jOffset < tiles.length &&
+            (tiles[i][j] == tiles[i + iOffset][j + jOffset] ||
+                tiles[i + iOffset][j + jOffset] == 0)) {
+          if (tiles[i + iOffset][j + jOffset] == 0) {
+            clearSpaces(direction);
+            clearSpaces(direction);
           }
+
+          if (tiles[i][j] == tiles[i + iOffset][j + jOffset]) {
+            merge(i, j, i + iOffset, j + jOffset);
+          }
+        }
+      }
+    }
+
+    clearSpaces(direction);
+  }
+
+  clearSpaces(String direction) {
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = 0; j < tiles.length; j++) {
+        int iOffset = 0;
+        int jOffset = 0;
+
+        switch (direction.toUpperCase()) {
+          case "UP":
+            iOffset = -1;
+            break;
+
+          case "DOWN":
+            iOffset = 1;
+            break;
+
+          case "LEFT":
+            jOffset = -1;
+            break;
+
+          case "RIGHT":
+            jOffset = 1;
+            break;
+        }
+
+        if (i + iOffset >= 0 &&
+            i + iOffset < tiles.length &&
+            j + jOffset >= 0 &&
+            j + jOffset < tiles.length &&
+            (tiles[i + iOffset][j + jOffset] == 0)) {
+          merge(i, j, i + iOffset, j + jOffset);
         }
       }
     }
   }
 
   //x1 est la case qui récupére la somme
-  merge(int x1, int y1, int x2, int y2, int mergex, int mergey) {
-    tiles[mergex][mergey] = tiles[x1][y1] + tiles[x2][y2];
-    tiles[x2][y2] = 0;
-    if (mergey != y1) {
-      tiles[x1][y1] = 0;
+  merge(int x1, int y1, int x2, int y2) {
+    tiles[x2][y2] = tiles[x1][y1] + tiles[x2][y2];
+    tiles[x1][y1] = 0;
+  }
+
+  countCurrentBestScore() {
+    int currentBestTile = 0;
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = 0; j < tiles.length; j++) {
+        if (tiles[i][j] > currentBestTile) {
+          currentBestTile = tiles[i][j];
+        }
+      }
     }
+
+    return currentBestTile;
   }
 
   spawnRandomTile() {

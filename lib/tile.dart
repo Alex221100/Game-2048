@@ -32,15 +32,12 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
         child: Center(
             child: Text(value > 0 ? '$value' : "",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 50,
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
-                    ..strokeWidth = 6
+                    ..strokeWidth = 5
                     ..color = const Color.fromRGBO(119, 110, 101, 47),
                 ))));
-    /*child: Padding(
-          padding: EdgeInsets.all(70.0),
-        ));*/
   }
 
   void merge(ColorfulTileState mergedTile) {
