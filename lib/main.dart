@@ -18,6 +18,7 @@ class PositionedTiles extends StatefulWidget {
 
 class PositionedTilesState extends State<PositionedTiles> {
   late List<List<int>> tiles;
+  int size = 4;
 
   @override
   void initState() {
@@ -30,6 +31,13 @@ class PositionedTilesState extends State<PositionedTiles> {
     String? swipeDirection;
     InheritedScore inheritedScore = InheritedScore.of(context);
 
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem(child: Text("4"),value: 4),
+      const DropdownMenuItem(child: Text("5"),value: 5),
+      const DropdownMenuItem(child: Text("6"),value: 6),
+      const DropdownMenuItem(child: Text("7"),value: 7),
+      ];
+
     return Scaffold(
         body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +49,17 @@ class PositionedTilesState extends State<PositionedTiles> {
                   children: <Widget>[
                 Padding(
                 padding: const EdgeInsets.only(right: 30),
-                child: SizedBox(
+                child: DropdownButton(
+                  value: size,
+                  onChanged: (int? newValue) {
+                  setState(() {
+                    size = newValue!;
+                    resetGrid();
+                  });},
+                  items: items)),
+                  Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child:SizedBox(
                     height: 50,
                     width: 100,
                     
@@ -148,7 +166,12 @@ class PositionedTilesState extends State<PositionedTiles> {
                         int newScore = countCurrentBestScore();
                         inheritedScore.scoreStructure.setCurrentScore(newScore);
 
-                        // TODO : Checker le score en fonction de la taille de tiles (5*5 = 2048 * 2, 6*6 = 2048 * 3 etc...)
+                        for (var tile in tiles) {
+                          if (tile == 2048 * (size+1 - 4) || checkIfGridIsFull()) {
+                            inheritedScore.scoreStructure.setBestScore(newScore);
+                            tiles = resetGrid();
+                        }
+                        }
                         if (newScore == 2048 || checkIfGridIsFull()) {
                           inheritedScore.scoreStructure.setBestScore(newScore);
                           tiles = resetGrid();
@@ -157,7 +180,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                     }
                   },
                   child: GridView.count(
-                      crossAxisCount: 4,
+                      crossAxisCount: size,
                       children: tiles
                           .expand((value) => value)
                           .map<StatefulColorfulTile>((element) =>
@@ -270,8 +293,8 @@ class PositionedTilesState extends State<PositionedTiles> {
   // TODO : Retirer les side effects
   resetGrid() {
     tiles = List.generate(
-        4,
-        (index) => List.generate(4, (index2) {
+        size,
+        (index) => List.generate(size, (index2) {
               return 0;
             }),
         growable: false);
