@@ -11,8 +11,8 @@ class ScoreStructure {
   setBestScore(int newValue) {
     if (newValue > bestScore) {
       bestScore = newValue;
-      currentScore = 0;
     }
+    currentScore = 0;
   }
 }
 
