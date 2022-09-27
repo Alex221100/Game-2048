@@ -5,7 +5,8 @@ import 'score.dart';
 import 'tile.dart';
 
 void main() {
-  runApp(MaterialApp(home: PositionedTiles(key: UniqueKey())));
+  runApp(InheritedScore(
+      child: MaterialApp(home: PositionedTiles(key: UniqueKey()))));
 }
 
 class PositionedTiles extends StatefulWidget {
@@ -21,25 +22,18 @@ class PositionedTilesState extends State<PositionedTiles> {
   @override
   void initState() {
     super.initState();
-    tiles = List.generate(
-        4,
-        (index) => List.generate(4, (index2) {
-              return 2;
-              //return StatefulColorfulTile(key: UniqueKey());
-            }),
-        growable: false);
+    tiles = resetGrid();
   }
 
   @override
   Widget build(BuildContext context) {
     String? swipeDirection;
-    InheritedScore? inheritedScore = InheritedScore.of(context);
+    InheritedScore inheritedScore = InheritedScore.of(context);
 
     return Scaffold(
-        body: InheritedScore(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
           Center(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -49,22 +43,19 @@ class PositionedTilesState extends State<PositionedTiles> {
                     width: 225,
                     child: Container(
                         color: Colors.orangeAccent,
-                        child: Center(child: Builder(builder: (context) {
-                          inheritedScore = InheritedScore.of(context);
-                          return Text(
-                              "Best Score : ${InheritedScore.of(context)?.scoreStructure.bestScore}",
-                              style: const TextStyle(fontSize: 18.0));
-                        })))),
+                        child: Center(
+                            child: Text(
+                                "Best Score : ${InheritedScore.of(context).scoreStructure.bestScore}",
+                                style: const TextStyle(fontSize: 18.0))))),
                 SizedBox(
                     height: 50,
                     width: 225,
                     child: Container(
                         color: Colors.amberAccent,
-                        child: Center(child: Builder(builder: (context) {
-                          return Text(
-                              "Current Score : ${InheritedScore.of(context)?.scoreStructure.currentScore}",
-                              style: const TextStyle(fontSize: 18.0));
-                        }))))
+                        child: Center(
+                            child: Text(
+                                "Current Score : ${InheritedScore.of(context).scoreStructure.currentScore}",
+                                style: const TextStyle(fontSize: 18.0)))))
               ])),
           Container(
               color: const Color.fromRGBO(187, 173, 160, 1),
@@ -119,6 +110,16 @@ class PositionedTilesState extends State<PositionedTiles> {
                       }
 
                       spawnRandomTile();
+                      setState(() {
+                        int newScore = countCurrentBestScore();
+                        inheritedScore.scoreStructure.setCurrentScore(newScore);
+
+                        // TODO : Checker le score en fonction de la taille de tiles (5*5 = 2048 * 2, 6*6 = 2048 * 3 etc...)
+                        if (newScore == 2048 || checkIfGridIsFull()) {
+                          inheritedScore.scoreStructure.setBestScore(newScore);
+                          tiles = resetGrid();
+                        }
+                      });
                     }
                   },
                   child: GridView.count(
@@ -128,9 +129,10 @@ class PositionedTilesState extends State<PositionedTiles> {
                           .map<StatefulColorfulTile>((element) =>
                               StatefulColorfulTile(element, key: UniqueKey()))
                           .toList())))
-        ])));
+        ]));
   }
 
+  // TODO : Modifier move et clearSpaces pour éviter de repasser dans la liste sans raison
   move(String direction) {
     for (int i = 0; i < tiles.length; i++) {
       for (int j = 0; j < tiles.length; j++) {
@@ -215,6 +217,35 @@ class PositionedTilesState extends State<PositionedTiles> {
   merge(int x1, int y1, int x2, int y2) {
     tiles[x2][y2] = tiles[x1][y1] + tiles[x2][y2];
     tiles[x1][y1] = 0;
+  }
+
+  checkIfGridIsFull() {
+    bool result = true;
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = 0; j < tiles.length; j++) {
+        if (tiles[i][j] == 0) {
+          result = false;
+          break;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  // TODO : Retirer les side effects
+  resetGrid() {
+    tiles = List.generate(
+        4,
+        (index) => List.generate(4, (index2) {
+              return 0;
+            }),
+        growable: false);
+
+    spawnRandomTile();
+    spawnRandomTile();
+
+    return tiles;
   }
 
   countCurrentBestScore() {

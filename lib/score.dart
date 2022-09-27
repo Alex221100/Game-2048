@@ -13,6 +13,7 @@ class ScoreStructure {
   setBestScore(int newValue) {
     if (newValue > bestScore) {
       bestScore = newValue;
+      currentScore = 0;
     }
   }
 }
@@ -29,8 +30,8 @@ class InheritedScore extends InheritedWidget {
       oldWidget.scoreStructure.currentScore != scoreStructure.currentScore ||
       oldWidget.scoreStructure.bestScore != scoreStructure.bestScore;
 
-  static InheritedScore? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedScore>();
+  static InheritedScore of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedScore>()!;
   }
 
   setCurrentScore(int newValue) {
