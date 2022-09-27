@@ -35,32 +35,66 @@ class PositionedTilesState extends State<PositionedTiles> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
           Center(
+              child: Padding(padding: const EdgeInsets.only(bottom: 30),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                SizedBox(
+                Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: SizedBox(
                     height: 50,
-                    width: 225,
+                    width: 100,
+                    
                     child: Container(
-                        color: Colors.orangeAccent,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(187, 173, 160, 1),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
                         child: Center(
                             child: Text(
-                                "Best Score : ${InheritedScore.of(context).scoreStructure.bestScore}",
-                                style: const TextStyle(fontSize: 18.0))))),
-                SizedBox(
+                                "Best : ${InheritedScore.of(context).scoreStructure.bestScore}",
+                                style: const TextStyle(fontSize: 18.0)))))),
+                Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child:SizedBox(
                     height: 50,
-                    width: 225,
+                    width: 100,
                     child: Container(
-                        color: Colors.amberAccent,
+                      decoration: const BoxDecoration(
+                          color: Color.fromRGBO(187, 173, 160, 1),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
                         child: Center(
                             child: Text(
-                                "Current Score : ${InheritedScore.of(context).scoreStructure.currentScore}",
-                                style: const TextStyle(fontSize: 18.0)))))
-              ])),
+                                "Score : ${InheritedScore.of(context).scoreStructure.currentScore}",
+                                style: const TextStyle(fontSize: 18.0)))))),
+
+                SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        resetGrid();
+                      });
+                      
+                    },
+                    child:Container(
+                      decoration: const BoxDecoration(
+                          color: Color.fromRGBO(187, 173, 160, 1),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Center(
+                            child: Center(
+                            child: Image.asset('../assets/img/refresh.png'))))))
+              ]))),
           Container(
-              color: const Color.fromRGBO(187, 173, 160, 1),
               height: 450,
               width: 450,
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(187, 173, 160, 1),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
               child: GestureDetector(
                   onPanUpdate: (details) {
                     if (details.delta.dx > 1) {
