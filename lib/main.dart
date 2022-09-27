@@ -252,9 +252,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     int currentBestTile = 0;
     for (int i = 0; i < tiles.length; i++) {
       for (int j = 0; j < tiles.length; j++) {
-        if (tiles[i][j] > currentBestTile) {
-          currentBestTile = tiles[i][j];
-        }
+        currentBestTile += tiles[i][j];
       }
     }
 

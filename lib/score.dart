@@ -5,9 +5,7 @@ class ScoreStructure {
   int bestScore = 0;
 
   setCurrentScore(int newValue) {
-    if (newValue > bestScore) {
-      currentScore = newValue;
-    }
+    currentScore = newValue;
   }
 
   setBestScore(int newValue) {
