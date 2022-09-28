@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'score.dart';
 import 'tile.dart';
+import 'popup.dart';
 
 void main() {
   runApp(InheritedScore(
@@ -186,6 +187,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                             int tile = tiles[i][j];
                             if (tile == (2048 * (size + 1 - 4)) ||
                                 checkIfGridIsFull()) {
+                                  Popup.showMyPopup(context);
                               inheritedScore.scoreStructure
                                   .setBestScore(newScore);
                               tiles = resetGrid();
