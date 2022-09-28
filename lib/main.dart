@@ -31,162 +31,181 @@ class PositionedTilesState extends State<PositionedTiles> {
     String? swipeDirection;
     InheritedScore inheritedScore = InheritedScore.of(context);
 
-    List<DropdownMenuItem<int>> items = [
-      const DropdownMenuItem(child: Text("4"),value: 4),
-      const DropdownMenuItem(child: Text("5"),value: 5),
-      const DropdownMenuItem(child: Text("6"),value: 6),
-      const DropdownMenuItem(child: Text("7"),value: 7),
-      ];
+    List<DropdownMenuItem<int>> items = List.generate(
+        10,
+        (index) =>
+            DropdownMenuItem(child: Text("${index + 2}"), value: index + 2),
+        growable: false);
 
     return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-          Center(
-              child: Padding(padding: const EdgeInsets.only(bottom: 30),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+        body: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+            Widget>[
+      Center(
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                      Widget>[
                 Padding(
-                padding: const EdgeInsets.only(right: 30),
-                child: DropdownButton(
-                  value: size,
-                  onChanged: (int? newValue) {
-                  setState(() {
-                    size = newValue!;
-                    resetGrid();
-                  });},
-                  items: items)),
-                  Padding(
-                padding: const EdgeInsets.only(right: 30),
-                child:SizedBox(
-                    height: 50,
-                    width: 100,
-                    
-                    child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(187, 173, 160, 1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Center(
-                            child: Text(
-                                "Best : ${InheritedScore.of(context).scoreStructure.bestScore}",
-                                style: const TextStyle(fontSize: 18.0)))))),
+                    padding: const EdgeInsets.only(right: 30),
+                    child: DropdownButton(
+                        value: size,
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            size = newValue!;
+                            resetGrid();
+                            inheritedScore.scoreStructure.setCurrentScore(0);
+                          });
+                        },
+                        items: items)),
                 Padding(
-                padding: const EdgeInsets.only(right: 30),
-                child:SizedBox(
-                    height: 50,
-                    width: 100,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(187, 173, 160, 1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Center(
-                            child: Text(
-                                "Score : ${InheritedScore.of(context).scoreStructure.currentScore}",
-                                style: const TextStyle(fontSize: 18.0)))))),
-
+                    padding: const EdgeInsets.only(right: 30),
+                    child: SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: Container(
+                            decoration: const BoxDecoration(
+                              color: Color.fromRGBO(187, 173, 160, 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Center(
+                                child: Text(
+                                    "Best : ${InheritedScore.of(context).scoreStructure.bestScore}",
+                                    style: const TextStyle(fontSize: 18.0)))))),
+                Padding(
+                    padding: const EdgeInsets.only(right: 30),
+                    child: SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: Container(
+                            decoration: const BoxDecoration(
+                              color: Color.fromRGBO(187, 173, 160, 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Center(
+                                child: Text(
+                                    "Score : ${InheritedScore.of(context).scoreStructure.currentScore}",
+                                    style: const TextStyle(fontSize: 18.0)))))),
                 SizedBox(
                     height: 50,
                     width: 50,
                     child: GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        resetGrid();
-                      });
-                      
-                    },
-                    child:Container(
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(187, 173, 160, 1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Center(
+                        onTap: () {
+                          setState(() {
+                            resetGrid();
+                            inheritedScore.scoreStructure.setCurrentScore(0);
+                          });
+                        },
+                        child: Container(
+                            decoration: const BoxDecoration(
+                              color: Color.fromRGBO(187, 173, 160, 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
                             child: Center(
-                            child: Image.asset('../assets/img/refresh.png'))))))
+                                child: Center(
+                                    child: Image.asset(
+                                        '../assets/img/refresh.png'))))))
               ]))),
-          Container(
-              height: 450,
-              width: 450,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(187, 173, 160, 1),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: GestureDetector(
-                  onPanUpdate: (details) {
-                    if (details.delta.dx > 1) {
-                      swipeDirection = "right";
+      Container(
+          height: 450,
+          width: 450,
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(187, 173, 160, 1),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: GestureDetector(
+              onPanUpdate: (details) {
+                if (details.delta.dx > 1) {
+                  swipeDirection = "right";
+                } else {
+                  if (details.delta.dx < -1) {
+                    swipeDirection = "left";
+                  } else {
+                    if (details.delta.dy > 1) {
+                      swipeDirection = "down";
                     } else {
-                      if (details.delta.dx < -1) {
-                        swipeDirection = "left";
+                      if (details.delta.dy < -1) {
+                        swipeDirection = "up";
+                      }
+                    }
+                  }
+                }
+              },
+              onPanEnd: (details) {
+                if (swipeDirection != null) {
+                  List<List<int>> previousTiles = List.generate(
+                      size,
+                      (index) => List.generate(size, (index2) {
+                            return tiles[index][index2];
+                          }),
+                      growable: false);
+
+                  if (swipeDirection == "right") {
+                    print("Action right");
+                    setState(() {
+                      move("right");
+                    });
+                  } else {
+                    if (swipeDirection == "left") {
+                      print("Action left");
+                      setState(() {
+                        move("left");
+                      });
+                    } else {
+                      if (swipeDirection == "down") {
+                        print("Action down");
+                        setState(() {
+                          move("down");
+                        });
                       } else {
-                        if (details.delta.dy > 1) {
-                          swipeDirection = "down";
-                        } else {
-                          if (details.delta.dy < -1) {
-                            swipeDirection = "up";
-                          }
+                        if (swipeDirection == "up") {
+                          print("Action up");
+                          setState(() {
+                            move("up");
+                          });
                         }
                       }
                     }
-                  },
-                  onPanEnd: (details) {
-                    if (swipeDirection != null) {
-                      if (swipeDirection == "right") {
-                        print("Action right");
-                        setState(() {
-                          move("right");
-                        });
+                  }
+
+                  if (!tilesAreEquals(tiles, previousTiles)) {
+                    spawnRandomTile();
+                    setState(() {
+                      int newScore = countCurrentBestScore();
+                      inheritedScore.scoreStructure.setCurrentScore(newScore);
+
+                      if (checkIfGridIsFull()) {
+                        inheritedScore.scoreStructure.setBestScore(newScore);
+                        tiles = resetGrid();
                       } else {
-                        if (swipeDirection == "left") {
-                          print("Action left");
-                          setState(() {
-                            move("left");
-                          });
-                        } else {
-                          if (swipeDirection == "down") {
-                            print("Action down");
-                            setState(() {
-                              move("down");
-                            });
-                          } else {
-                            if (swipeDirection == "up") {
-                              print("Action up");
-                              setState(() {
-                                move("up");
-                              });
+                        for (int i = 0; i < tiles.length; i++) {
+                          for (int j = 0; j < tiles.length; j++) {
+                            int tile = tiles[i][j];
+                            if (tile == (2048 * (size + 1 - 4)) ||
+                                checkIfGridIsFull()) {
+                              inheritedScore.scoreStructure
+                                  .setBestScore(newScore);
+                              tiles = resetGrid();
+                              break;
                             }
                           }
                         }
                       }
-
-                      spawnRandomTile();
-                      setState(() {
-                        int newScore = countCurrentBestScore();
-                        inheritedScore.scoreStructure.setCurrentScore(newScore);
-
-                        for (var tile in tiles) {
-                          if (tile == 2048 * (size+1 - 4) || checkIfGridIsFull()) {
-                            inheritedScore.scoreStructure.setBestScore(newScore);
-                            tiles = resetGrid();
-                        }
-                        }
-                        if (newScore == 2048 || checkIfGridIsFull()) {
-                          inheritedScore.scoreStructure.setBestScore(newScore);
-                          tiles = resetGrid();
-                        }
-                      });
-                    }
-                  },
-                  child: GridView.count(
-                      crossAxisCount: size,
-                      children: tiles
-                          .expand((value) => value)
-                          .map<StatefulColorfulTile>((element) =>
-                              StatefulColorfulTile(element, key: UniqueKey()))
-                          .toList())))
-        ]));
+                    });
+                  }
+                }
+              },
+              child: GridView.count(
+                  crossAxisCount: size,
+                  children: tiles
+                      .expand((value) => value)
+                      .map<StatefulColorfulTile>((element) =>
+                          StatefulColorfulTile(element, key: UniqueKey()))
+                      .toList())))
+    ]));
   }
 
   // TODO : Modifier move et clearSpaces pour éviter de repasser dans la liste sans raison
@@ -314,6 +333,22 @@ class PositionedTilesState extends State<PositionedTiles> {
     }
 
     return currentBestTile;
+  }
+
+  bool tilesAreEquals(List<List<int>> list1, List<List<int>> list2) {
+    bool result = true;
+
+    for (int i = 0; i < list1.length; i++) {
+      for (int j = 0; j < list1.length; j++) {
+        if (list1[i][j] != list2[i][j]) {
+          result = false;
+          break;
+        }
+      }
+    }
+
+    print(result);
+    return result;
   }
 
   spawnRandomTile() {
