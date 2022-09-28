@@ -185,7 +185,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                         for (int i = 0; i < tiles.length; i++) {
                           for (int j = 0; j < tiles.length; j++) {
                             int tile = tiles[i][j];
-                            if (tile == (2048 * (size + 1 - 4)) ||
+                            if (tile == (2048 * (size + 3)) ||
                                 checkIfGridIsFull()) {
                                   Popup.showMyPopup(context);
                               inheritedScore.scoreStructure
