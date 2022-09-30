@@ -35,7 +35,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     List<DropdownMenuItem<int>> items = List.generate(
         10,
         (index) =>
-            DropdownMenuItem(child: Text("${index + 2}"), value: index + 2),
+            DropdownMenuItem(value: index + 2, child: Text("${index + 2}")),
         growable: false);
 
     return Scaffold(
@@ -144,6 +144,7 @@ class PositionedTilesState extends State<PositionedTiles> {
                           }),
                       growable: false);
 
+                  // Print des actions étant donné que sur PC, la direction est parfois erronée
                   if (swipeDirection == "right") {
                     print("Action right");
                     setState(() {
@@ -181,13 +182,14 @@ class PositionedTilesState extends State<PositionedTiles> {
                       if (checkIfGridIsFull()) {
                         inheritedScore.scoreStructure.setBestScore(newScore);
                         tiles = resetGrid();
+                        Popup.showMyPopup(context);
                       } else {
                         for (int i = 0; i < tiles.length; i++) {
                           for (int j = 0; j < tiles.length; j++) {
                             int tile = tiles[i][j];
                             if (tile == (2048 * (size + 3)) ||
                                 checkIfGridIsFull()) {
-                                  Popup.showMyPopup(context);
+                              Popup.showMyPopup(context);
                               inheritedScore.scoreStructure
                                   .setBestScore(newScore);
                               tiles = resetGrid();
@@ -210,7 +212,6 @@ class PositionedTilesState extends State<PositionedTiles> {
     ]));
   }
 
-  // TODO : Modifier move et clearSpaces pour éviter de repasser dans la liste sans raison
   move(String direction) {
     for (int i = 0; i < tiles.length; i++) {
       for (int j = 0; j < tiles.length; j++) {
@@ -291,7 +292,6 @@ class PositionedTilesState extends State<PositionedTiles> {
     }
   }
 
-  //x1 est la case qui récupére la somme
   merge(int x1, int y1, int x2, int y2) {
     tiles[x2][y2] = tiles[x1][y1] + tiles[x2][y2];
     tiles[x1][y1] = 0;
@@ -311,7 +311,6 @@ class PositionedTilesState extends State<PositionedTiles> {
     return result;
   }
 
-  // TODO : Retirer les side effects
   resetGrid() {
     tiles = List.generate(
         size,
@@ -349,7 +348,6 @@ class PositionedTilesState extends State<PositionedTiles> {
       }
     }
 
-    print(result);
     return result;
   }
 
